@@ -17,6 +17,8 @@ int ThrottleSensorMaxValue = 858;
 float ThrottleSensorVoltageMin = 0.90;
 float ThrottleSensorVoltageMax = 4.17;
 
+
+
 void setup() {
   // put your setup code here, to run once:
   
@@ -37,21 +39,32 @@ void loop()
       delay(20);
     }while(SensorValue < ThrottleSensorMinValue); //no new signals
     //Serial.print("Sensor value passed threshold.");
-    float VoltageFromHandThrottle = f_GetVoltageFromSensorValue(SensorValue);
-    int ThrottleOutput = f_GetLinearOutputDutyCycleToMotorController(VoltageFromHandThrottle);
-    Serial.print("Motor controller linear pwm duty cycle output: ");
-    Serial.println(ThrottleOutput);
-    if(ThrottleOutput > DutyCycleMax)
-    {
-      Serial.println("Throttle output passed upper limit.");
-      analogWrite(5, DutyCycleMax);
-    }
-    analogWrite(5, ThrottleOutput);
+    int ThrottlePwmOutputMapped = map(
+      SensorValue, 
+      ThrottleSensorMinValue, 
+      ThrottleSensorMaxValue,
+      DutyCycleMin,
+      DutyCycleMax
+      );
+    analogWrite(5, ThrottlePwmOutputMapped);
 }
 
+///everything below unused?
+
 //gets the voltage coming from the hand throttles
-float f_GetVoltageFromSensorValue(int SensorValue)
+float f_GetVoltageFromHandThrottleSensorValue(int SensorValue)
 {
+  //different ranges have different mappings to smooth things out.
+  int MappedSensorValue = 0;
+  int Range1 = 300;
+  int Range2 = 600;
+  int Range3 = 900;
+  //Range 1:
+  if(SensorValue < Range1)
+  {
+    MappedSensorValue = map(SensorValue, ThrottleSensorMinValue, Range1, )
+  }
+  int MappedSensorValue = map(SensorValue, 0)
   float Voltage = SensorValue * (5.0 / 1023.0);
   //Serial.print("Voltage read from Hand Throttle: ");
   //Serial.println(Voltage);
