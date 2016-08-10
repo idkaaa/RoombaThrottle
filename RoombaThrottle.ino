@@ -39,14 +39,33 @@ void loop()
       delay(20);
     }while(SensorValue < ThrottleSensorMinValue); //no new signals
     //Serial.print("Sensor value passed threshold.");
-    int ThrottlePwmOutputMapped = map(
+    int ThrottlePwmOutput = f_GetRemappedThrottlePwmOutput(SensorValue);
+    analogWrite(5, ThrottlePwmOutputMapped);
+}
+
+int f_GetRemappedThrottlePwmOutput(int SensorValue)
+{
+  int ReMappedSensorValue = SensorValue;
+  int SlowSpeedRangeMax = 500;
+  if(SensorValue < SlowSpeedRangeMax)
+  {
+    ReMappedSensorValue = 
+    map(
       SensorValue, 
+      ThrottleSensorMinValue, 
+      SlowSpeedRangeMax,
+      ThrottleSensorMinValue,
+      0.5*SlowSpeedRangeMax
+      );
+  }
+    return map(
+      ReMappedSensorValue, 
       ThrottleSensorMinValue, 
       ThrottleSensorMaxValue,
       DutyCycleMin,
       DutyCycleMax
       );
-    analogWrite(5, ThrottlePwmOutputMapped);
+  }
 }
 
 ///everything below unused?
