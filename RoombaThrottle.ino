@@ -40,7 +40,7 @@ void loop()
     }while(SensorValue < ThrottleSensorMinValue); //no new signals
     //Serial.print("Sensor value passed threshold.");
     int ThrottlePwmOutput = f_GetRemappedThrottlePwmOutput(SensorValue);
-    analogWrite(5, ThrottlePwmOutputMapped);
+    analogWrite(5, ThrottlePwmOutput);
 }
 
 int f_GetRemappedThrottlePwmOutput(int SensorValue)
@@ -65,30 +65,30 @@ int f_GetRemappedThrottlePwmOutput(int SensorValue)
       DutyCycleMin,
       DutyCycleMax
       );
-  }
 }
+
 
 ///everything below unused?
 
-//gets the voltage coming from the hand throttles
-float f_GetVoltageFromHandThrottleSensorValue(int SensorValue)
-{
-  //different ranges have different mappings to smooth things out.
-  int MappedSensorValue = 0;
-  int Range1 = 300;
-  int Range2 = 600;
-  int Range3 = 900;
-  //Range 1:
-  if(SensorValue < Range1)
-  {
-    MappedSensorValue = map(SensorValue, ThrottleSensorMinValue, Range1, )
-  }
-  int MappedSensorValue = map(SensorValue, 0)
-  float Voltage = SensorValue * (5.0 / 1023.0);
-  //Serial.print("Voltage read from Hand Throttle: ");
-  //Serial.println(Voltage);
-  return Voltage;
-}
+////gets the voltage coming from the hand throttles
+//float f_GetVoltageFromHandThrottleSensorValue(int SensorValue)
+//{
+//  //different ranges have different mappings to smooth things out.
+//  int MappedSensorValue = 0;
+//  int Range1 = 300;
+//  int Range2 = 600;
+//  int Range3 = 900;
+//  //Range 1:
+//  if(SensorValue < Range1)
+//  {
+//    MappedSensorValue = map(SensorValue, ThrottleSensorMinValue, Range1, )
+//  }
+//  int MappedSensorValue = map(SensorValue, 0)
+//  float Voltage = SensorValue * (5.0 / 1023.0);
+//  //Serial.print("Voltage read from Hand Throttle: ");
+//  //Serial.println(Voltage);
+//  return Voltage;
+//}
 
 //converts throttle voltage input to smoother output for the motor controller
 int f_GetLinearOutputDutyCycleToMotorController(float VoltageFromHandThrottle)
@@ -112,4 +112,3 @@ int f_GetLinearOutputDutyCycleToMotorController(float VoltageFromHandThrottle)
   //Serial.println(LinearOutput);
   return (int)LinearOutput + DutyCycleMin;
 }
-
