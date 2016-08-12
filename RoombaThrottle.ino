@@ -111,23 +111,32 @@ void f_ResetThrottlePwmOutputs()
 int f_GetRemappedThrottlePwmOutput(int SensorValue)
 {
   int ReMappedSensorValue = SensorValue;
-//  int SlowSpeedRangeMax = 500;
-//  if(SensorValue < SlowSpeedRangeMax)
-//  {
-//    ReMappedSensorValue = 
-//    map(
-//      SensorValue, 
-//      ThrottleSensorMinValue, 
-//      SlowSpeedRangeMax,
-//      ThrottleSensorMinValue,
-//      0.5*SlowSpeedRangeMax
-//      );
-//  }
+  int SlowSpeedRangeMax = 400;
+  float RatioPoint = 0.3;
+  if(SensorValue < SlowSpeedRangeMax)
+  {
     return map(
-      ReMappedSensorValue, 
+      SensorValue, 
       ThrottleSensorMinValue, 
-      ThrottleSensorMaxValue,
+      SlowSpeedRangeMax,
       DutyCycleMin,
+      RatioPoint*DutyCycleMax
+      );
+  }
+  return map(
+      SensorValue, 
+      SlowSpeedRangeMax,
+      ThrottleSensorMaxValue,
+      RatioPoint*DutyCycleMax,
       DutyCycleMax
       );
+
+//linear
+//    return map(
+//      ReMappedSensorValue, 
+//      ThrottleSensorMinValue, 
+//      ThrottleSensorMaxValue,
+//      DutyCycleMin,
+//      DutyCycleMax
+//      );
 }
